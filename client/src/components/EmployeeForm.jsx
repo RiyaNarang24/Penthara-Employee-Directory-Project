@@ -36,9 +36,10 @@ function EmployeeForm({employee, onSubmit,onCancel}){
     };
     const isEditing=Boolean(employee);
     return (
-    <div className="rounded-2xl border border-[var(--color-border)] bg-white p-6 shadow-sm sm:p-7">
+    <div className="rounded-2xl border border-[var(--color-border)] bg-white p-6 shadow-sm">
       <div className="mb-6">
-        <h2 className="text-xl font-semibold text-[var(--color-dark)]">
+        
+        <h2 className="text-xl font-semibold text-[var(--color-heading)]">
           {isEditing ? "Edit Employee" : "Add Employee"}
         </h2>
 
@@ -53,7 +54,7 @@ function EmployeeForm({employee, onSubmit,onCancel}){
         <div>
           <label
             htmlFor="name"
-            className="mb-2 block text-sm font-medium text-[var(--color-dark)]"
+            className="mb-2 block text-sm font-medium text-[var(--color-heading)]"
           >
             Name
           </label>
@@ -73,7 +74,7 @@ function EmployeeForm({employee, onSubmit,onCancel}){
         <div>
           <label
             htmlFor="role"
-            className="mb-2 block text-sm font-medium text-[var(--color-dark)]"
+            className="mb-2 block text-sm font-medium text-[var(--color-heading)]"
           >
             Role
           </label>
@@ -93,7 +94,7 @@ function EmployeeForm({employee, onSubmit,onCancel}){
         <div>
           <label
             htmlFor="department"
-            className="mb-2 block text-sm font-medium text-[var(--color-dark)]"
+            className="mb-2 block text-sm font-medium text-[var(--color-heading)]"
           >
             Department
           </label>

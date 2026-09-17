@@ -11,7 +11,10 @@ const PORT=process.env.PORT||5000;
 //Middleware
 app.use(
   cors({
-    origin: "https://penthara-employee-directory-project.vercel.app",
+    origin: [
+      "http://localhost:5173",
+      "https://penthara-employee-directory-project.vercel.app",
+    ],
   })
 );
 app.use(express.json());

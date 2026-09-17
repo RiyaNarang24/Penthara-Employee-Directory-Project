@@ -2,7 +2,7 @@ function SearchBar({ searchTerm, onSearch }) {
   return (
     <div className="relative">
       {/* Search icon */}
-      <div className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-slate-400">
+      <div className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-[var(--color-secondary)]">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -21,7 +21,7 @@ function SearchBar({ searchTerm, onSearch }) {
         value={searchTerm}
         onChange={(e) => onSearch(e.target.value)}
         placeholder="Search by name, role or department..."
-        className="w-full rounded-xl border border-[var(--color-border)] bg-white py-3.5 pl-11 pr-4 text-sm text-[var(--color-dark)] shadow-sm outline-none transition placeholder:text-slate-400 focus:border-[var(--color-primary)] focus:ring-4 focus:ring-purple-100"
+        className="w-full rounded-xl border border-[var(--color-border)] bg-white py-3 pl-11 pr-4 text-sm text-[var(--color-text)] outline-none transition placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-secondary)] focus:ring-4 focus:ring-blue-100"
       />
     </div>
   );

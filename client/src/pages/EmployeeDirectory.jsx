@@ -123,18 +123,19 @@ const handleDelete = async (employee) => {
   });
 
   return (
-    <main className="min-h-screen px-4 py-8 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(91,33,182,0.08),_transparent_35%),radial-gradient(circle_at_top_right,_rgba(37,99,235,0.07),_transparent_30%),var(--color-background)] px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         {/* Page heading and primary action */}
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-[var(--color-dark)] sm:text-4xl">
+            <h1 className="text-3xl font-bold tracking-tight text-[var(--color-heading)] sm:text-4xl">
               Employee Directory
-            </h1>
+               </h1>
 
-            <p className="mt-2 text-sm text-slate-500 sm:text-base">
+            <p className="mt-2 text-sm text-[var(--color-text)] sm:text-base">
               Manage and keep track of your organization's employees.
             </p>
+            
           </div>
 
           <button

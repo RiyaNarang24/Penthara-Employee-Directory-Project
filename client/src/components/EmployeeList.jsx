@@ -9,8 +9,8 @@ function EmployeeList({ employees, onEdit,onDelete }) {
         <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-primary-soft)] text-[var(--color-primary)]">
           <span className="text-lg font-semibold">?</span>
         </div>
-
-        <h3 className="mt-4 text-lg font-semibold text-[var(--color-dark)]">
+        
+        <h3 className="text-lg font-semibold text-[var(--color-heading)]">
           No employees found
         </h3>
 
