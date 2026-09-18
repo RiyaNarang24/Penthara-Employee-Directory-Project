@@ -19,41 +19,46 @@ function EmployeeDirectory() {
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   // Load employees when the page opens
   useEffect(() => {
-    const loadEmployees = async () => {
-      try {
-        const data = await getEmployees();
-        setEmployees(data);
-      } catch (error) {
-        setError("Unable to load employees. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const loadEmployees = async () => {
+    try {
+      setError("");
+      const data = await getEmployees(currentPage, 6, searchTerm);
 
-    loadEmployees();
-  }, []);
+      setEmployees(data.employees);
+      setTotalPages(data.totalPages);
+    } catch (error) {
+      setError("Unable to load employees. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  loadEmployees();
+}, [currentPage, searchTerm]);
 
   /* Handle form data when adding an employee */
   const handleFormSubmit = async (formData) => {
-    try {
-      setError("");
+  try {
+    setError("");
 
-      const newEmployee = await createEmployee(formData);
+    await createEmployee(formData);
 
-      setEmployees((currentEmployees) => [
-        newEmployee,
-        ...currentEmployees,
-      ]);
+    const data = await getEmployees(1, 6, searchTerm);
 
-      setShowForm(false);
-      setEditingEmployee(null);
-    } catch (error) {
-      setError(error.message);
-    }
-  };
+    setEmployees(data.employees);
+    setTotalPages(data.totalPages);
+    setCurrentPage(1);
+
+    setShowForm(false);
+    setEditingEmployee(null);
+  } catch (error) {
+    setError(error.message);
+  }
+};
 
   /* Select an employee for editing */
   const handleEdit = (employee) => {
@@ -86,7 +91,7 @@ function EmployeeDirectory() {
       setError("Unable to update employee. Please try again.");
     }
   };
-  /* Delete an employee */
+/* Delete an employee */
 const handleDelete = async (employee) => {
   const confirmed = window.confirm(
     `Are you sure you want to delete ${employee.name}?`
@@ -101,26 +106,19 @@ const handleDelete = async (employee) => {
 
     await deleteEmployee(employee._id);
 
-    setEmployees((currentEmployees) =>
-      currentEmployees.filter(
-        (currentEmployee) => currentEmployee._id !== employee._id
-      )
-    );
+    const data = await getEmployees(currentPage, 6, searchTerm);
+
+    if (data.employees.length === 0 && currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    } else {
+      setEmployees(data.employees);
+      setTotalPages(data.totalPages);
+    }
   } catch (error) {
     setError("Unable to delete employee. Please try again.");
   }
 };
 
-  /* Search employees by name, role or department */
-  const filteredEmployees = employees.filter((employee) => {
-    const search = searchTerm.toLowerCase();
-
-    return (
-      employee.name.toLowerCase().includes(search) ||
-      employee.role.toLowerCase().includes(search) ||
-      employee.department.toLowerCase().includes(search)
-    );
-  });
 
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(91,33,182,0.08),_transparent_35%),radial-gradient(circle_at_top_right,_rgba(37,99,235,0.07),_transparent_30%),var(--color-background)] px-4 py-8 sm:px-6 lg:px-8">
@@ -188,16 +186,57 @@ const handleDelete = async (employee) => {
             )}
 
             <SearchBar
-              searchTerm={searchTerm}
-              onSearch={setSearchTerm}
-            />
+             searchTerm={searchTerm}
+             onSearch={(value) => {
+            setSearchTerm(value);
+            setCurrentPage(1);
+             }}
+            /> 
 
             <EmployeeList
-              employees={filteredEmployees}
+              employees={employees}
               onEdit={handleEdit}
               onDelete={handleDelete}
 
             />
+            {/* Pagination */}
+          {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2 pt-2">
+          <button
+            onClick={() => setCurrentPage(currentPage - 1)}
+           disabled={currentPage === 1}
+          className="rounded-lg border border-[var(--color-border)] bg-white px-3 py-2 text-sm text-[var(--color-text)] transition hover:bg-[var(--color-primary-soft)] disabled:cursor-not-allowed disabled:opacity-50"
+           >
+           Previous
+           </button>
+
+    {[...Array(totalPages)].map((_, index) => {
+      const page = index + 1;
+
+      return (
+        <button
+          key={page}
+          onClick={() => setCurrentPage(page)}
+          className={`h-10 w-10 rounded-lg text-sm font-medium transition ${
+            currentPage === page
+              ? "bg-[var(--color-primary)] text-white"
+              : "border border-[var(--color-border)] bg-white text-[var(--color-text)] hover:bg-[var(--color-primary-soft)]"
+          }`}
+        >
+          {page}
+        </button>
+      );
+    })}
+
+    <button
+      onClick={() => setCurrentPage(currentPage + 1)}
+      disabled={currentPage === totalPages}
+      className="rounded-lg border border-[var(--color-border)] bg-white px-3 py-2 text-sm text-[var(--color-text)] transition hover:bg-[var(--color-primary-soft)] disabled:cursor-not-allowed disabled:opacity-50"
+    >
+      Next
+    </button>
+  </div>
+)}
           </div>
         )}
       </div>

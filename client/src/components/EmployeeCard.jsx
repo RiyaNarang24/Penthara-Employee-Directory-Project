@@ -2,10 +2,11 @@ function EmployeeCard({employee,onEdit,onDelete}){
     const initials=employee.name.split(" ").map((name)=>name[0]).join("").slice(0,2).toUpperCase();
     /*employee card to show name,role,department and edit button*/
     return (
-    <div className="group rounded-2xl border border-[var(--color-border)] bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-1 hover:border-[var(--color-secondary)]/40 hover:shadow-lg">
-      <div className="flex items-start justify-between gap-4">
+    <div className="group relative overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-1 hover:border-[var(--color-primary)]/20 hover:shadow-lg">
+      <div className="pointer-events-none absolute -right-8 -top-8 h-20 w-20 rounded-full bg-[var(--color-primary-soft)]/70" />
+       <div className="relative z-10 flex items-start justify-between gap-4">
         <div className="flex min-w-0 items-center gap-3">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-50 text-sm font-semibold text-[var(--color-secondary)]">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[var(--color-primary-soft)] text-sm font-semibold text-[var(--color-primary)]">
             {initials}
           </div>
 
@@ -19,7 +20,7 @@ function EmployeeCard({employee,onEdit,onDelete}){
             </p>
           </div>
         </div>
-
+         <div className="flex shrink-0 items-center gap-2">
         <button
           type="button"
           onClick={() => onEdit(employee)}
@@ -34,9 +35,10 @@ function EmployeeCard({employee,onEdit,onDelete}){
           >
            Delete
         </button>
+        </div>
       </div>
 
-      <div className="mt-5 border-t border-[var(--color-border)] pt-4">
+      <div className="relative z-10 mt-5 border-t border-[var(--color-border)] pt-4">
         <span className="inline-flex rounded-full bg-[var(--color-accent-soft)] px-3 py-1 text-xs font-medium text-[var(--color-accent)]">
          {employee.department}
         </span>

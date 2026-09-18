@@ -1,7 +1,13 @@
 const API_URL = import.meta.env.VITE_API_URL;
-/* Function to read employees */
-export const getEmployees = async () => {
-  const response = await fetch(API_URL);
+/* Function to read employees with pagination and search */
+export const getEmployees = async (
+  page = 1,
+  limit = 6,
+  search = ""
+) => {
+  const response = await fetch(
+    `${API_URL}?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`
+  );
 
   if (!response.ok) {
     throw new Error("Failed to fetch employees");

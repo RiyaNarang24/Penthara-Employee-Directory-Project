@@ -1,16 +1,45 @@
 const Employee=require("../models/Employee");
-//function to get employees
 
-const getEmployees=async(req,res)=>{
-    try{
-        const employees=await Employee.find().sort({createdAt:-1});
-        res.status(200).json(employees);
-    }
-    catch(error){
-        res.status(500).json({message:"Failed to fetch employees"});
-    }
+
+
+// Function to get employees with pagination and search
+const getEmployees = async (req, res) => {
+  try {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 6;
+    const search = req.query.search || "";
+
+    const skip = (page - 1) * limit;
+
+    const searchFilter = search
+      ? {
+          $or: [
+            { name: { $regex: search, $options: "i" } },
+            { role: { $regex: search, $options: "i" } },
+            { department: { $regex: search, $options: "i" } },
+          ],
+        }
+      : {};
+
+    const employees = await Employee.find(searchFilter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const totalEmployees = await Employee.countDocuments(searchFilter);
+
+    res.status(200).json({
+      employees,
+      totalEmployees,
+      currentPage: page,
+      totalPages: Math.ceil(totalEmployees / limit),
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to fetch employees",
+    });
+  }
 };
-
 //function to create employees
 
 const createEmployee = async (req, res) => {
